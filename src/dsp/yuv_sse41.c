@@ -106,7 +106,7 @@ static void YUV420ToRGB_SSE41(const uint8_t* WEBP_RESTRICT const y,
 // Pack the planar buffers
 // rrrr... rrrr... gggg... gggg... bbbb... bbbb....
 // triplet by triplet in the output buffer rgb as rgbrgbrgbrgb ...
-static WEBP_INLINE void PlanarTo24b_SSE41(
+static WEBP_INLINE WEBP_TARGET_ATTRIBUTE("ssse3") void PlanarTo24b_SSE41(
     __m128i* const in0, __m128i* const in1, __m128i* const in2,
     __m128i* const in3, __m128i* const in4, __m128i* const in5,
     uint8_t* WEBP_RESTRICT const rgb) {
@@ -295,7 +295,7 @@ WEBP_TSAN_IGNORE_FUNCTION void WebPInitSamplersSSE41(void) {
 // Unpack the 8b input rgbrgbrgbrgb ... as contiguous registers:
 // rrrr... rrrr... gggg... gggg... bbbb... bbbb....
 // Similar to PlanarTo24bHelper(), but in reverse order.
-static WEBP_INLINE void RGB24PackedToPlanar_SSE41(
+static WEBP_INLINE WEBP_TARGET_ATTRIBUTE("ssse3") void RGB24PackedToPlanar_SSE41(
     const uint8_t* WEBP_RESTRICT const rgb, __m128i* const out /*out[6]*/) {
   const __m128i A0 = _mm_loadu_si128((const __m128i*)(rgb +  0));
   const __m128i A1 = _mm_loadu_si128((const __m128i*)(rgb + 16));
@@ -339,7 +339,7 @@ static WEBP_INLINE void RGB24PackedToPlanar_SSE41(
 #undef WEBP_SSE41_SHUFF
 
 // Convert 8 packed ARGB to r[], g[], b[]
-static WEBP_INLINE void RGB32PackedToPlanar_SSE41(
+static WEBP_INLINE WEBP_TARGET_ATTRIBUTE("ssse3") void RGB32PackedToPlanar_SSE41(
     const uint32_t* WEBP_RESTRICT const argb, __m128i* const rgb /*in[6]*/) {
   const __m128i zero = _mm_setzero_si128();
   __m128i a0 = LOAD_16(argb + 0);
