@@ -27,7 +27,7 @@ static WEBP_INLINE uint32_t HorizontalSum_SSE41(__m128i cost) {
   return _mm_cvtsi128_si32(cost);
 }
 
-static uint32_t ExtraCost_SSE41(const uint32_t* const a, int length) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") uint32_t ExtraCost_SSE41(const uint32_t* const a, int length) {
   int i;
   __m128i cost = _mm_set_epi32(2 * a[7], 2 * a[6], a[5], a[4]);
   assert(length % 8 == 0);
@@ -44,9 +44,9 @@ static uint32_t ExtraCost_SSE41(const uint32_t* const a, int length) {
   return HorizontalSum_SSE41(cost);
 }
 
-static uint32_t ExtraCostCombined_SSE41(const uint32_t* WEBP_RESTRICT const a,
-                                        const uint32_t* WEBP_RESTRICT const b,
-                                        int length) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") uint32_t ExtraCostCombined_SSE41(const uint32_t* WEBP_RESTRICT const a,
+                                                                        const uint32_t* WEBP_RESTRICT const b,
+                                                                        int length) {
   int i;
   __m128i cost = _mm_add_epi32(_mm_set_epi32(2 * a[7], 2 * a[6], a[5], a[4]),
                                _mm_set_epi32(2 * b[7], 2 * b[6], b[5], b[4]));
@@ -70,8 +70,8 @@ static uint32_t ExtraCostCombined_SSE41(const uint32_t* WEBP_RESTRICT const a,
 //------------------------------------------------------------------------------
 // Subtract-Green Transform
 
-static void SubtractGreenFromBlueAndRed_SSE41(uint32_t* argb_data,
-                                              int num_pixels) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void SubtractGreenFromBlueAndRed_SSE41(uint32_t* argb_data,
+                                                                              int num_pixels) {
   int i;
   const __m128i kCstShuffle = _mm_set_epi8(-1, 13, -1, 13, -1, 9, -1, 9,
                                            -1,  5, -1,  5, -1, 1, -1, 1);
@@ -96,11 +96,11 @@ static void SubtractGreenFromBlueAndRed_SSE41(uint32_t* argb_data,
 #define MK_CST_16(HI, LO) \
   _mm_set1_epi32((int)(((uint32_t)(HI) << 16) | ((LO) & 0xffff)))
 
-static void CollectColorBlueTransforms_SSE41(const uint32_t* WEBP_RESTRICT argb,
-                                             int stride,
-                                             int tile_width, int tile_height,
-                                             int green_to_blue, int red_to_blue,
-                                             uint32_t histo[]) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void CollectColorBlueTransforms_SSE41(const uint32_t* WEBP_RESTRICT argb,
+                                                                             int stride,
+                                                                             int tile_width, int tile_height,
+                                                                             int green_to_blue, int red_to_blue,
+                                                                             uint32_t histo[]) {
   const __m128i mult =
       MK_CST_16(CST_5b(red_to_blue) + 256,CST_5b(green_to_blue));
   const __m128i perm =
@@ -143,11 +143,11 @@ static void CollectColorBlueTransforms_SSE41(const uint32_t* WEBP_RESTRICT argb,
   }
 }
 
-static void CollectColorRedTransforms_SSE41(const uint32_t* WEBP_RESTRICT argb,
-                                            int stride,
-                                            int tile_width, int tile_height,
-                                            int green_to_red,
-                                            uint32_t histo[]) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void CollectColorRedTransforms_SSE41(const uint32_t* WEBP_RESTRICT argb,
+                                                                            int stride,
+                                                                            int tile_width, int tile_height,
+                                                                            int green_to_red,
+                                                                            uint32_t histo[]) {
   const __m128i mult = MK_CST_16(0, CST_5b(green_to_red));
   const __m128i mask_g = _mm_set1_epi32(0x0000ff00);
   if (tile_width >= 4) {
