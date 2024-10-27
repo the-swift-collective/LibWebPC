@@ -20,9 +20,9 @@
 //------------------------------------------------------------------------------
 // Color-space conversion functions
 
-static void TransformColorInverse_SSE41(const VP8LMultipliers* const m,
-                                        const uint32_t* const src,
-                                        int num_pixels, uint32_t* dst) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void TransformColorInverse_SSE41(const VP8LMultipliers* const m,
+                                                                        const uint32_t* const src,
+                                                                        int num_pixels, uint32_t* dst) {
 // sign-extended multiplying constants, pre-shifted by 5.
 #define CST(X)  (((int16_t)(m->X << 8)) >> 5)   // sign-extend
   const __m128i mults_rb =
@@ -77,8 +77,8 @@ static void TransformColorInverse_SSE41(const VP8LMultipliers* const m,
   }                                                   \
 } while (0)
 
-static void ConvertBGRAToRGB_SSE41(const uint32_t* WEBP_RESTRICT src,
-                                   int num_pixels, uint8_t* WEBP_RESTRICT dst) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void ConvertBGRAToRGB_SSE41(const uint32_t* WEBP_RESTRICT src,
+                                                                   int num_pixels, uint8_t* WEBP_RESTRICT dst) {
   const __m128i* in = (const __m128i*)src;
   __m128i* out = (__m128i*)dst;
   const __m128i perm0 = _mm_setr_epi8(2, 1, 0, 6, 5, 4, 10, 9,
@@ -95,8 +95,8 @@ static void ConvertBGRAToRGB_SSE41(const uint32_t* WEBP_RESTRICT src,
   }
 }
 
-static void ConvertBGRAToBGR_SSE41(const uint32_t* WEBP_RESTRICT src,
-                                   int num_pixels, uint8_t* WEBP_RESTRICT dst) {
+static WEBP_TARGET_ATTRIBUTE("sse4.1") void ConvertBGRAToBGR_SSE41(const uint32_t* WEBP_RESTRICT src,
+                                                                   int num_pixels, uint8_t* WEBP_RESTRICT dst) {
   const __m128i* in = (const __m128i*)src;
   __m128i* out = (__m128i*)dst;
   const __m128i perm0 = _mm_setr_epi8(0, 1, 2, 4, 5, 6, 8, 9, 10,
