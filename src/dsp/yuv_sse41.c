@@ -415,8 +415,8 @@ static WEBP_INLINE void ConvertRGBToUV_SSE41(const __m128i* const R,
 #undef MK_CST_16
 #undef TRANSFORM
 
-static void ConvertRGB24ToY_SSE41(const uint8_t* WEBP_RESTRICT rgb,
-                                  uint8_t* WEBP_RESTRICT y, int width) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void ConvertRGB24ToY_SSE41(const uint8_t* WEBP_RESTRICT rgb,
+                                                                 uint8_t* WEBP_RESTRICT y, int width) {
   const int max_width = width & ~31;
   int i;
   for (i = 0; i < max_width; rgb += 3 * 16 * 2) {
@@ -450,8 +450,8 @@ static void ConvertRGB24ToY_SSE41(const uint8_t* WEBP_RESTRICT rgb,
   }
 }
 
-static void ConvertBGR24ToY_SSE41(const uint8_t* WEBP_RESTRICT bgr,
-                                  uint8_t* WEBP_RESTRICT y, int width) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void ConvertBGR24ToY_SSE41(const uint8_t* WEBP_RESTRICT bgr,
+                                                                 uint8_t* WEBP_RESTRICT y, int width) {
   const int max_width = width & ~31;
   int i;
   for (i = 0; i < max_width; bgr += 3 * 16 * 2) {
@@ -485,8 +485,8 @@ static void ConvertBGR24ToY_SSE41(const uint8_t* WEBP_RESTRICT bgr,
   }
 }
 
-static void ConvertARGBToY_SSE41(const uint32_t* WEBP_RESTRICT argb,
-                                 uint8_t* WEBP_RESTRICT y, int width) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void ConvertARGBToY_SSE41(const uint32_t* WEBP_RESTRICT argb,
+                                                                uint8_t* WEBP_RESTRICT y, int width) {
   const int max_width = width & ~15;
   int i;
   for (i = 0; i < max_width; i += 16) {
@@ -514,10 +514,10 @@ static void HorizontalAddPack_SSE41(const __m128i* const A,
   *out = _mm_packs_epi32(C, D);
 }
 
-static void ConvertARGBToUV_SSE41(const uint32_t* WEBP_RESTRICT argb,
-                                  uint8_t* WEBP_RESTRICT u,
-                                  uint8_t* WEBP_RESTRICT v,
-                                  int src_width, int do_store) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void ConvertARGBToUV_SSE41(const uint32_t* WEBP_RESTRICT argb,
+                                                                 uint8_t* WEBP_RESTRICT u,
+                                                                 uint8_t* WEBP_RESTRICT v,
+                                                                 int src_width, int do_store) {
   const int max_width = src_width & ~31;
   int i;
   for (i = 0; i < max_width; i += 32, u += 16, v += 16) {
@@ -551,7 +551,7 @@ static void ConvertARGBToUV_SSE41(const uint32_t* WEBP_RESTRICT argb,
 }
 
 // Convert 16 packed ARGB 16b-values to r[], g[], b[]
-static WEBP_INLINE void RGBA32PackedToPlanar_16b_SSE41(
+static WEBP_INLINE WEBP_TARGET_ATTRIBUTE("ssse3") void RGBA32PackedToPlanar_16b_SSE41(
     const uint16_t* WEBP_RESTRICT const rgbx,
     __m128i* const r, __m128i* const g, __m128i* const b) {
   const __m128i in0 = LOAD_16(rgbx +  0);  // r0 | g0 | b0 |x| r1 | g1 | b1 |x
@@ -582,9 +582,9 @@ static WEBP_INLINE void RGBA32PackedToPlanar_16b_SSE41(
   *b = _mm_unpackhi_epi64(B1, B3);
 }
 
-static void ConvertRGBA32ToUV_SSE41(const uint16_t* WEBP_RESTRICT rgb,
-                                    uint8_t* WEBP_RESTRICT u,
-                                    uint8_t* WEBP_RESTRICT v, int width) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void ConvertRGBA32ToUV_SSE41(const uint16_t* WEBP_RESTRICT rgb,
+                                                                   uint8_t* WEBP_RESTRICT u,
+                                                                   uint8_t* WEBP_RESTRICT v, int width) {
   const int max_width = width & ~15;
   const uint16_t* const last_rgb = rgb + 4 * max_width;
   while (rgb < last_rgb) {
