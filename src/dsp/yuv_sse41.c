@@ -132,6 +132,7 @@ static WEBP_INLINE WEBP_TARGET_ATTRIBUTE("ssse3") void PlanarTo24b_SSE41(
   _mm_storeu_si128((__m128i*)(rgb + 80), *in5);
 }
 
+WEBP_TARGET_ATTRIBUTE("ssse3")
 void VP8YuvToRgb32_SSE41(const uint8_t* WEBP_RESTRICT y,
                          const uint8_t* WEBP_RESTRICT u,
                          const uint8_t* WEBP_RESTRICT v,
@@ -156,6 +157,7 @@ void VP8YuvToRgb32_SSE41(const uint8_t* WEBP_RESTRICT y,
   PlanarTo24b_SSE41(&rgb0, &rgb1, &rgb2, &rgb3, &rgb4, &rgb5, dst);
 }
 
+WEBP_TARGET_ATTRIBUTE("ssse3")
 void VP8YuvToBgr32_SSE41(const uint8_t* WEBP_RESTRICT y,
                          const uint8_t* WEBP_RESTRICT u,
                          const uint8_t* WEBP_RESTRICT v,
@@ -183,10 +185,10 @@ void VP8YuvToBgr32_SSE41(const uint8_t* WEBP_RESTRICT y,
 //-----------------------------------------------------------------------------
 // Arbitrary-length row conversion functions
 
-static void YuvToRgbRow_SSE41(const uint8_t* WEBP_RESTRICT y,
-                              const uint8_t* WEBP_RESTRICT u,
-                              const uint8_t* WEBP_RESTRICT v,
-                              uint8_t* WEBP_RESTRICT dst, int len) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void YuvToRgbRow_SSE41(const uint8_t* WEBP_RESTRICT y,
+                                                             const uint8_t* WEBP_RESTRICT u,
+                                                             const uint8_t* WEBP_RESTRICT v,
+                                                             uint8_t* WEBP_RESTRICT dst, int len) {
   int n;
   for (n = 0; n + 32 <= len; n += 32, dst += 32 * 3) {
     __m128i R0, R1, R2, R3, G0, G1, G2, G3, B0, B1, B2, B3;
@@ -221,10 +223,10 @@ static void YuvToRgbRow_SSE41(const uint8_t* WEBP_RESTRICT y,
   }
 }
 
-static void YuvToBgrRow_SSE41(const uint8_t* WEBP_RESTRICT y,
-                              const uint8_t* WEBP_RESTRICT u,
-                              const uint8_t* WEBP_RESTRICT v,
-                              uint8_t* WEBP_RESTRICT dst, int len) {
+static WEBP_TARGET_ATTRIBUTE("ssse3") void YuvToBgrRow_SSE41(const uint8_t* WEBP_RESTRICT y,
+                                                             const uint8_t* WEBP_RESTRICT u,
+                                                             const uint8_t* WEBP_RESTRICT v,
+                                                             uint8_t* WEBP_RESTRICT dst, int len) {
   int n;
   for (n = 0; n + 32 <= len; n += 32, dst += 32 * 3) {
     __m128i R0, R1, R2, R3, G0, G1, G2, G3, B0, B1, B2, B3;
