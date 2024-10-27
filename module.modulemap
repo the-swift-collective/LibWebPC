@@ -1,0 +1,24 @@
+module sharpyuv {
+  header "sharpyuv/sharpyuv_cpu.h"
+  header "sharpyuv/sharpyuv_csp.h"
+  header "sharpyuv/sharpyuv_dsp.h"
+  header "sharpyuv/sharpyuv_gamma.h"
+  header "sharpyuv/sharpyuv.h"
+
+  export *
+}
+
+module imageioutil {
+  header "imageio/image_dec.h"
+  header "imageio/image_enc.h"
+  header "imageio/imageio_util.h"
+  header "imageio/jpegdec.h"
+  header "imageio/metadata.h"
+  header "imageio/pngdec.h"
+  header "imageio/pnmdec.h"
+  header "imageio/tiffdec.h"
+  header "imageio/webpdec.h"
+  header "imageio/wicdec.h"
+
+  export *
+}
